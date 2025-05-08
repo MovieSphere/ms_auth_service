@@ -3,10 +3,10 @@ package com.upao.infraestructura.ms_auth_service.models;
 public class ResponseToken {
     private String jwt;
 
-    public ResponseToken() {
-    }
+    public ResponseToken() {}
 
     public ResponseToken(String jwt) {
+        this.jwt = jwt;
     }
 
     public String getJwt() {
@@ -17,4 +17,5 @@ public class ResponseToken {
         this.jwt = jwt;
     }
 }
+
 
