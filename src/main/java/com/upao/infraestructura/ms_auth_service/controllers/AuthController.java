@@ -1,38 +1,32 @@
 package com.upao.infraestructura.ms_auth_service.controllers;
 
-import com.upao.infraestructura.ms_auth_service.models.ResponseToken;
-import com.upao.infraestructura.ms_auth_service.models.User;
-import com.upao.infraestructura.ms_auth_service.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-import java.util.Optional;
+import com.upao.infraestructura.ms_auth_service.models.AuthRequest;
+import com.upao.infraestructura.ms_auth_service.models.AuthResponse;
+import com.upao.infraestructura.ms_auth_service.services.AuthService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final AuthService authService;
 
-    @GetMapping
-    public ResponseToken getJWToken() {
-        return new ResponseToken("eylk23423u4ho23542243e.2j3nk23");
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody AuthRequest request) {
+        authService.register(request);
+        return ResponseEntity.ok("Usuario Registrado");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseToken> login(@RequestBody Map<String, String> body) {
-        String username = body.get("username");
-        String password = body.get("password");
-
-        Optional<User> userOpt = userRepository.findByUsername(username);
-        if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
-            return ResponseEntity.ok(new ResponseToken("mocked.jwt.token"));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+        String token = authService.login(request);
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 }
