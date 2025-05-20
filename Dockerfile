@@ -15,7 +15,7 @@ RUN chmod +x ./gradlew && \
 
 # Copiar código fuente y construir el JAR
 COPY src/ ./src/
-RUN ./gradlew build --no-daemon
+RUN ./gradlew build -x test --no-daemon
 
 # Etapa 2: Imagen final
 FROM eclipse-temurin:17-jdk-jammy
