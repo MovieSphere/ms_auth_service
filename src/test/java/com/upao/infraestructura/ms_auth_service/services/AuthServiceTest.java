@@ -1,4 +1,3 @@
-
 package com.upao.infraestructura.ms_auth_service.services;
 
 import com.upao.infraestructura.ms_auth_service.models.AuthRequest;
@@ -8,7 +7,8 @@ import com.upao.infraestructura.ms_auth_service.security.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.security.authentication.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -68,7 +68,7 @@ public class AuthServiceTest {
     @Test
     void login_validCredentials_returnsToken() {
         AuthRequest request = new AuthRequest("user", "pass");
-        User user = new User("user", "pass", "USER");
+        User user = new User(null, "user", "pass", "USER");
         when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
         when(jwtUtil.generateToken(user)).thenReturn("mocked-token");
 
